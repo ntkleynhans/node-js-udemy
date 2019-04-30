@@ -14,9 +14,7 @@ const getNotes = () => {
 const removeNote = (title) => {
   const notes = loadNotes();
 
-  const popNote = notes.filter((note) => {
-    return note.title !== title;
-  });
+  const popNote = notes.filter((note) => note.title !== title);
 
   if(notes.length === popNote.length) {
     log(warn('No note found!'));
@@ -29,9 +27,7 @@ const removeNote = (title) => {
 const addNote = (title, body) => {
   const notes = loadNotes();
 
-  const duplicateNotes = notes.filter((note) => {
-    return note.title === title
-  });
+  const duplicateNotes = notes.filter((note) => note.title === title);
 
   if (duplicateNotes.length === 0) {
     notes.push({
@@ -41,9 +37,9 @@ const addNote = (title, body) => {
     });
 
     saveNotes(notes);
-    console.log('Note saved!');
+    log(info('Note saved!'));
   } else {
-    console.log('Title has been taken: ', title);
+    log(error('Title has been taken: ', title));
   }
 };
 
