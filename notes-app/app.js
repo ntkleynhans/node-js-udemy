@@ -53,7 +53,7 @@ yargs.command({
   command: 'list',
   describe: 'List a note from a store',
   handler: () => {
-    log(info('Listing your note'));
+    notes.listNotes();
   }
 });
 
