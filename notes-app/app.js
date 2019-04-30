@@ -2,8 +2,8 @@ const chalk = require('chalk');
 //const validator = require('validator');
 const yargs = require('yargs');
 
-const add = require('./utils');
-const getNotes = require('./notes');
+//const add = require('./utils');
+const notes = require('./notes');
 
 const log = console.log;
 const error = chalk.red;
@@ -30,9 +30,7 @@ yargs.command({
     },
   },
   handler: (argv) => {
-    log('Adding a new note');
-    log(info('\tTitle: '), warn(argv.title));
-    log(info('\tBody:'), error(argv.body));
+    notes.addNote(argv.title, argv.body);
   }
 });
 
