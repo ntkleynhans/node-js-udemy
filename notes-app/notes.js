@@ -1,10 +1,30 @@
 const fs = require('fs');
+const chalk = require('chalk');
 
 const DB_NAME = 'notes.json';
+const log = console.log;
+const warn = chalk.yellow;
+const info = chalk.green;
+
 
 const getNotes = () => {
   return "Your notes..."
 }
+
+const removeNote = (title) => {
+  const notes = loadNotes();
+
+  const popNote = notes.filter((note) => {
+    return note.title !== title;
+  });
+
+  if(notes.length === popNote.length) {
+    log(warn('No note found!'));
+  } else {
+    log(info('Note removed: ', title));
+    saveNotes(popNote);
+  }
+};
 
 const addNote = (title, body) => {
   const notes = loadNotes();
@@ -44,5 +64,6 @@ const loadNotes = () => {
 
 module.exports = {
   getNotes: getNotes,
-  addNote: addNote
+  addNote: addNote,
+  removeNote: removeNote
 }
