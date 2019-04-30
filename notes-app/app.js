@@ -1,11 +1,7 @@
-/*const fs = require('fs');
-
-fs.writeFileSync('notes.txt', 'This file was created by node.js');
-
-fs.appendFileSync('notes.txt', 'Some text has been appended to the file');
-*/
 const chalk = require('chalk');
-const validator = require('validator');
+//const validator = require('validator');
+const yargs = require('yargs');
+
 const add = require('./utils');
 const getNotes = require('./notes');
 
@@ -14,17 +10,54 @@ const error = chalk.red;
 const warn = chalk.yellow;
 const info = chalk.green;
 
-/*log(chalk.green('Success!'));
-log(chalk.green.inverse('Inverse!'));
-log(chalk.blue.bgRed.bold(add(2,3)));
-log(chalk.blue(getNotes()));
-log(chalk.green.bold(validator.isEmail('neil@example.com')));*/
+//log(chalk.green.bold(validator.isEmail('neil@example.com')));
 
-switch(process.argv[2]) {
-  case 'add':
-    log(info('Adding'));
-    break;
-  default:
-    log(error(`Unknown command: ${process.argv[2]}`));
-    break;
-}
+yargs.version('0.0.1');
+
+yargs.command({
+  command: 'add',
+  describe: 'Add a note to the store',
+  builder: {
+    title: {
+      describe: 'Note title',
+      demandOption: true,
+      type: 'string'
+    },
+    body: {
+      describe: 'Note body',
+      demandOption: true,
+      type: 'string'
+    },
+  },
+  handler: (argv) => {
+    log('Adding a new note');
+    log(info('\tTitle: '), warn(argv.title));
+    log(info('\tBody:'), error(argv.body));
+  }
+});
+
+yargs.command({
+  command: 'remove',
+  describe: 'Remove a note from a store',
+  handler: () => {
+    log(info('Removing your note'));
+  }
+});
+
+yargs.command({
+  command: 'list',
+  describe: 'List a note from a store',
+  handler: () => {
+    log(info('Listing your note'));
+  }
+});
+
+yargs.command({
+  command: 'read',
+  describe: 'Read a note from a store',
+  handler: () => {
+    log(info('Reading your note'));
+  }
+});
+
+yargs.parse();
