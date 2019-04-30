@@ -11,7 +11,7 @@ const getNotes = require('./notes');
 const log = console.log
 
 log(chalk.green('Success!'));
-log(chalk.green.inverse('Success!'));
+log(chalk.green.inverse('Inverse!'));
 log(chalk.blue.bgRed.bold(add(2,3)));
 log(chalk.blue(getNotes()));
 log(chalk.green.bold(validator.isEmail('neil@example.com')));
