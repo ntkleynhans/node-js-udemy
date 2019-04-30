@@ -6,14 +6,21 @@ const log = console.log;
 const warn = chalk.yellow;
 const info = chalk.green;
 
+const readNote = (title) => {
+  const notes = loadNotes();
+  const note = notes.find((note) => note.title === title);
 
-const getNotes = () => {
-  return "Your notes..."
+  if (note) {
+    log(info(title))
+    log(info(note.body));
+  } else {
+    log(error('Title not found: ', title));
+  }
 }
 
 const listNotes = () => {
   const notes = loadNotes();
-
+  //debugger
   log(chalk.green.inverse('Your notes:'))
 
   notes.forEach((note) => {
@@ -23,7 +30,6 @@ const listNotes = () => {
 
 const removeNote = (title) => {
   const notes = loadNotes();
-
   const popNote = notes.filter((note) => note.title !== title);
 
   if(notes.length === popNote.length) {
@@ -36,10 +42,9 @@ const removeNote = (title) => {
 
 const addNote = (title, body) => {
   const notes = loadNotes();
+  const duplicateNote = notes.find((note) => note.title === title);
 
-  const duplicateNotes = notes.filter((note) => note.title === title);
-
-  if (duplicateNotes.length === 0) {
+  if (!duplicateNote) {
     notes.push({
       id: notes.length,
       title: title,
@@ -69,8 +74,8 @@ const loadNotes = () => {
 };
 
 module.exports = {
-  getNotes: getNotes,
   addNote: addNote,
   removeNote: removeNote,
-  listNotes: listNotes
+  listNotes: listNotes,
+  readNote: readNote
 }
