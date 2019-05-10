@@ -1,8 +1,39 @@
 const request = require('request');
+const yargs = require('yargs');
 
-const DARKSKY_URL = 'https://api.darksky.net/forecast/359540cf60a566a5bf311bab9ec5f1b7/37.8267,-122.4233';
+const DARKSKY_URL = 'https://api.darksky.net/forecast/359540cf60a566a5bf311bab9ec5f1b7/';
 
-request({url: DARKSKY_URL}, (error, response) => {
-  const data = JSON.parse(response.body);
-  console.log(data.currently);
+const MAPBOX_TOKEN = 'pk.eyJ1IjoibnRrbGV5bmhhbnMiLCJhIjoiY2p2aHBqeXBwMDVuYTN5dGVvdGI2enp1ZyJ9.mZCAlwRwsDvTbQKvn2pnkA';
+const MAPBOX_FORWARD_GEOCODING = "https://api.mapbox.com/geocoding/v5/mapbox.places/";
+
+const weatherLatLong = (latLong) => {
+  const url = `${DARKSKY_URL}${latLong}`;
+  console.log(url);
+  request({url: url, json: true}, (error, response) => {
+    console.log(response.body.currently);
+  });
+}
+
+const weather = (address) => {
+  const url = encodeURI(`${MAPBOX_FORWARD_GEOCODING}${address}.json?access_token=${MAPBOX_TOKEN}&limit=1`);
+  request({url: url, json: true}, (error, response) => {
+    weatherLatLong(response.body.features[0].center.join(","));
+  });
+}
+
+yargs.command({
+  command: 'weather',
+  describe: 'Get weather for address',
+  builder: {
+    address: {
+      describe: '',
+      demandOption: true,
+      type: 'string'
+    }
+  },
+  handler: (argv) => {
+    weather(argv.address);
+  }
 });
+
+yargs.parse();
