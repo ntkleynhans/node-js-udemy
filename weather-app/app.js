@@ -10,14 +10,26 @@ const weatherLatLong = (latLong) => {
   const url = `${DARKSKY_URL}${latLong}`;
   console.log(url);
   request({url: url, json: true}, (error, response) => {
-    console.log(response.body.currently);
+    if(!error || 200 === response.statusCode) {
+      console.log(response.body.currently);
+    } else {
+      console.log('!Error:', error);
+    }
   });
 }
 
 const weather = (address) => {
   const url = encodeURI(`${MAPBOX_FORWARD_GEOCODING}${address}.json?access_token=${MAPBOX_TOKEN}&limit=1`);
   request({url: url, json: true}, (error, response) => {
-    weatherLatLong(response.body.features[0].center.join(","));
+    if(error || 200 !== response.statusCode) {
+      console.log('!Error:', error);
+    } else {
+      if( response.body.features.length > 0) {
+        weatherLatLong(response.body.features[0].center.join(","));
+      } else {
+        console.log('!Error: cannot find location -- ' + address);
+      }
+    }
   });
 }
 
